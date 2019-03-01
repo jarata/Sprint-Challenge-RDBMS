@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
         tbl.string('name', 128)
             .notNullable()
             .unique();
-        tbl.string('decription', 128)
+        tbl.string('description', 128)
             .notNullable();
         tbl.boolean('completed');
         tbl.timestamps(true, true);

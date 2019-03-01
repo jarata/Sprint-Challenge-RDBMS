@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const knex = require('knex');
 const knexConfig = require('../knexfile');
+const pa = require('./projectHelper')
 
 const db = knex(knexConfig.development);
+
 
 // GET
 router.get('/', async (req, res) => {
@@ -39,17 +41,30 @@ router.get('/:id', async (req, res) => {
 
 // GET /:id/actions
 router.get('/:id/actions', async (req, res) => {
+    const {id} = req.params;
+    const projectActions = await pa.getProjectActions(id);
     try {
-        const projectAction = await db('actions').where({
-            projectID: req.params.id
-        });
-        res.status(200).json(projectAction)
+        if (projectActions) {
+            res.status(200).json(projectActions);
+        } else {
+            res.status(404).json({
+                error: "The project's actions with the specified ID doesn't exist"
+            })
+        }
     } catch (e) {
-        console.log(e);
         res.status(500).json({
             error: "The project's actions information could not be retrieved"
         })
     }
+    // try {
+    //     const projectAction = await db('actions').where({projectID: req.params.id})
+    //     res.status(200).json(projectAction)
+    // } catch (e) {
+    //     console.log(e);
+    //     res.status(500).json({
+    //         error: "The project's actions information could not be retrieved"
+    //     })
+    // }
 });
 
 // POST
