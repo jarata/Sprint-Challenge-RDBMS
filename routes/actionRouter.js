@@ -17,4 +17,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+// POST
+router.post('/', async (req, res) => {
+    try {
+        const action = await db('actions').insert(req.body);
+        res.status(201).json({
+            message: "Action has been created",
+            action
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            error: "The actions information could not be retrieved."
+        })
+    }
+});
+
 module.exports = router;
